@@ -1,0 +1,47 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>Your TITLE</title>
+<style>
+body {
+	background: #f2f2f2;
+	margin: 0;
+}
+.container {
+	background: #FFF;
+	width: 980px;
+	margin: 0 auto;
+	padding: 20px;
+	box-sizing: border-box;
+	box-shadow: 0 0 3px #ccc;
+}
+ul {
+	padding: 0;
+	margin: 0;
+}
+ul li {
+	list-style: none;
+	margin: 0 0 15px;
+	padding: 0;
+	font-size: 18px;
+	font-family: 'Open Sans', sans-serif;
+}
+.footerbox {
+    margin-bottom: 15px;
+    padding: 15px;
+    text-align: center;
+}
+</style>
+<link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div class="container">
+		<h1>Search results</h1>
+		<ul>
+            {% for link in links %}
+            <li>» <a href="{{ link.0 }}">{{ link.0 }}</a> {{ link.1  }}</li>
+            {% endfor %}
+		</ul>
+	</div>
+	<div class="footerbox">
+		Powered by <a href="https://rust-lang.org">Rust</a> and <a href="http://python.org">Python</a> in supersimplesearch.
+	</div>
+</body></html>
