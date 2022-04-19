@@ -1,5 +1,3 @@
-#![feature(proc_macro_hygiene, decl_macro)]
-
 #[macro_use]
 extern crate rocket;
 extern crate chrono;
@@ -8,7 +6,7 @@ extern crate serde_json;
 
 use chrono::prelude::*;
 use rocket::State;
-use rocket_contrib::templates::Template;
+use rocket_dyn_templates::Template;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs::File;
@@ -33,7 +31,7 @@ fn index() -> Template {
 }
 
 #[get("/?<q>")]
-fn search(q: Option<String>, cache: State<HashMap<String, LinksCache>>) -> Template {
+fn search(q: Option<String>, cache: &State<HashMap<String, LinksCache>>) -> Template {
     match q {
         Some(q) => {
             let query = q.to_lowercase();
@@ -81,18 +79,17 @@ fn loaddata() -> HashMap<String, LinksCache> {
                 links: HashMap::new(),
             });
             let ctime = item.date.parse::<DateTime<Local>>().unwrap();
-            *lc.links.entry(item.link.to_string()).or_insert(ctime);
+            let _ = *lc.links.entry(item.link.to_string()).or_insert(ctime);
         }
     }
     cache
 }
 
-fn main() {
+#[launch]
+fn rocket() -> _ {
     let cache = loaddata();
-    rocket::ignite()
+    rocket::build()
         .manage(cache)
         .mount("/", routes![index])
         .mount("/search", routes![search])
-        .attach(Template::fairing())
-        .launch();
 }
