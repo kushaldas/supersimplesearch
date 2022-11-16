@@ -33,8 +33,8 @@ fn index() -> Template {
 #[get("/?<q>")]
 fn search(q: Option<String>, cache: &State<HashMap<String, LinksCache>>) -> Template {
     match q {
-        Some(q) => {
-            let query = q.to_lowercase();
+        Some(qr) => {
+            let query = qr.to_lowercase().trim().to_string();
             let mut context = HashMap::<String, Vec<(String, String)>>::new();
             let mut links: Vec<(String, DateTime<Local>)> = Vec::new();
             let final_links: Vec<(String, String)> = Vec::new();
